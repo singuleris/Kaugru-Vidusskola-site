@@ -12,7 +12,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Images never overflow their container */
+
 img {
     max-width: 100%;
     height: auto;
@@ -25,12 +25,8 @@ body::before {
     left: -20px;
     right: -20px;
     bottom: -20px;
-
-    /* Izmanto savu fona attēlu (bez tā šis slānis ir tukšs) */
-    /* background-image: url("images/fons.jpg"); */
     background-size: cover;
     background-position: center;
-
     filter: blur(10px);
     z-index: -2;
 }
@@ -43,15 +39,13 @@ body::after {
     z-index: -1;
 }
 
-/* Header */
+
 header {
     min-height: 70px;
     padding: 0 40px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     background-color: #1e293b;
 }
 
@@ -90,7 +84,6 @@ nav a:hover {
     color: #38bdf8;
 }
 
-/* "Account" button in the nav looks like the other links */
 nav .nav-btn {
     width: auto;
     padding: 0;
@@ -106,7 +99,6 @@ nav .nav-btn:hover {
     color: #38bdf8;
 }
 
-/* Main */
 main {
     min-height: calc(100vh - 70px);
 
@@ -142,7 +134,6 @@ main {
     color: #38bdf8;
 }
 
-/* Visible keyboard focus everywhere */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
@@ -150,7 +141,6 @@ input:focus-visible {
     outline-offset: 2px;
 }
 
-/* Spacers */
 .spacer {
     height: 21px;
 }
@@ -159,7 +149,6 @@ input:focus-visible {
     height: 80px;
 }
 
-/* News grid */
 .news-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -177,7 +166,6 @@ input:focus-visible {
     color: #020000;
 }
 
-/* Hymn card */
 .hymn-card {
     max-width: 900px;
     margin: 4px auto;
@@ -232,7 +220,6 @@ input:focus-visible {
     line-height: 1.8;
 }
 
-/* Footer */
 footer {
     background-color: #1e293b;
     color: #cbd5e1;
@@ -269,7 +256,6 @@ footer {
     color: #94a3b8;
 }
 
-/* Links in the footer (address, phone, email) */
 .footer-block a {
     color: #94a3b8;
     font-size: 14px;
@@ -319,10 +305,6 @@ footer {
     margin: 0 auto;
     border-radius: 12px;
 }
-
-/* ============================= */
-/* Login / register modals       */
-/* ============================= */
 
 input[type=text],
 input[type=email],
@@ -437,11 +419,6 @@ span.psw {
     .animate { animation: none; }
 }
 
-/* ============================= */
-/* Mobile responsive adjustments */
-/* ============================= */
-
-/* Tablets and small laptops */
 @media (max-width: 1024px) {
     .news-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -457,7 +434,6 @@ span.psw {
     }
 }
 
-/* Tablets / large phones */
 @media (max-width: 768px) {
     header {
         flex-wrap: wrap;
@@ -549,7 +525,6 @@ span.psw {
     }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
     header {
         padding: 12px 15px;

@@ -11,20 +11,12 @@ from google.oauth2 import id_token
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Публичная часть сайта (на сервере её отдаёт nginx, тут — для локального теста)
 SITE_DIR = os.path.join(BASE_DIR, "static", "web")
-
-# Картинки новостей, загруженные из админки (отдаются nginx как /uploads/...)
 UPLOAD_DIR = os.path.join(SITE_DIR, "uploads")
 ALLOWED_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
-
-# Закрытые страницы — ВНЕ static/, nginx их напрямую не отдаёт
 PRIVATE_DIR = os.path.join(BASE_DIR, "private")
-
 DB_PATH = os.path.join(BASE_DIR, "users.db")
 
-# Client ID из Google Cloud Console (задаётся в сервисе systemd)
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 _google_request = google_requests.Request()
 
@@ -34,9 +26,6 @@ app.permanent_session_lifetime = timedelta(days=30)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 МБ на загрузку
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-
-# ---------- База данных ----------
 
 def get_db():
     if "db" not in g:
@@ -52,8 +41,6 @@ def close_db(exc):
         db.close()
 
 
-# Новости, которые уже были на сайте — попадут в базу при первом запуске.
-# Порядок: первая в списке окажется внизу страницы.
 SEED_NEWS = [
     ("Zināšanu diena", "2026. gada 1. septembris", "", "images/zin.png"),
     ("Literatūras saraksts vasaras lasīšanai", "", "", "images/literatura_2026a.png"),
@@ -62,7 +49,6 @@ SEED_NEWS = [
 
 
 def init_db():
-    # EXCLUSIVE — чтобы два воркера gunicorn не создали/заполнили таблицы одновременно
     conn = sqlite3.connect(DB_PATH, timeout=10, isolation_level=None)
     try:
         conn.execute("BEGIN EXCLUSIVE")
@@ -83,7 +69,6 @@ def init_db():
             conn.execute("ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0")
         if "google_sub" not in cols:
             conn.execute("ALTER TABLE users ADD COLUMN google_sub TEXT")
-        # один Google-аккаунт = один пользователь сайта
         conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_sub ON users(google_sub)")
 
         conn.execute("""
@@ -133,8 +118,6 @@ def admin_required(view):
     return wrapper
 
 
-# ---------- Картинки ----------
-
 def save_image(file):
     """Сохраняет загруженную картинку под случайным именем. Возвращает путь вида uploads/xxx.png."""
     if file is None or not file.filename:
@@ -160,9 +143,6 @@ def delete_upload(path):
 def too_large(err):
     return jsonify(ok=False, error="Image is too large (max 10 MB)"), 413
 
-
-# ---------- Страницы ----------
-
 @app.route("/")
 def index():
     return send_from_directory(SITE_DIR, "index.html")
@@ -174,9 +154,6 @@ def admin_page():
     resp = send_from_directory(PRIVATE_DIR, "admin.html")
     resp.headers["Cache-Control"] = "no-store"  # чтобы Cloudflare/браузер не кэшировали
     return resp
-
-
-# ---------- API: аккаунт ----------
 
 @app.post("/api/register")
 def api_register():
@@ -239,7 +216,7 @@ def api_auth_google():
 
     token = (request.get_json(silent=True) or {}).get("credential", "")
     try:
-        # Проверяет подпись Google, срок действия и что токен выдан именно нашему сайту
+     
         info = id_token.verify_oauth2_token(token, _google_request, GOOGLE_CLIENT_ID)
     except ValueError:
         return jsonify(ok=False, error="Google sign-in failed, try again"), 401
@@ -293,9 +270,6 @@ def api_logout():
     session.clear()
     return jsonify(ok=True)
 
-
-# ---------- API: новости (публичное чтение) ----------
-
 @app.get("/api/news")
 def api_news():
     rows = get_db().execute(
@@ -304,9 +278,6 @@ def api_news():
     resp = jsonify([dict(r) for r in rows])
     resp.headers["Cache-Control"] = "no-store"
     return resp
-
-
-# ---------- API для админов: пользователи ----------
 
 @app.get("/api/admin/users")
 @admin_required
@@ -347,9 +318,6 @@ def api_admin_delete_user(uid):
         return jsonify(ok=False, error="User not found"), 404
     return jsonify(ok=True)
 
-
-# ---------- API для админов: новости ----------
-
 def news_fields():
     return (
         request.form.get("title", "").strip(),
@@ -377,7 +345,6 @@ def api_admin_news_create():
     )
     db.commit()
     return jsonify(ok=True, id=cur.lastrowid)
-
 
 @app.post("/api/admin/news/<int:nid>")
 @admin_required
@@ -421,7 +388,6 @@ def api_admin_news_delete(nid):
     db.commit()
     delete_upload(row["image"])
     return jsonify(ok=True)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

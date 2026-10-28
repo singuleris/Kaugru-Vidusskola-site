@@ -1,5 +1,3 @@
-// ===================== Модальные окна =====================
-
 function openModal(id) {
     document.getElementById(id).style.display = "block";
 }
@@ -13,7 +11,6 @@ function openRegister() {
     openModal("id02");
 }
 
-// Закрытие по клику на тёмный фон вокруг формы
 window.addEventListener("click", e => {
     if (e.target.classList.contains("modal")) {
         e.target.style.display = "none";
@@ -21,9 +18,6 @@ window.addEventListener("click", e => {
 });
 
 
-// ===================== Вход и регистрация =====================
-
-// Что делать после любого успешного входа (пароль, регистрация, Google)
 function afterLogin(result) {
     if (result.is_admin) {
         location.href = "/admin";
@@ -67,9 +61,6 @@ document.querySelector("#id02 form")?.addEventListener("submit", e => {
     sendForm(e.target, "/api/register");
 });
 
-
-// ===================== Вход через Google =====================
-
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const s = document.createElement("script");
@@ -106,9 +97,9 @@ async function initGoogleSignIn() {
     if (!box) return;
 
     try {
-        // Client ID берётся с сервера — в HTML его вписывать не нужно
+       
         const cfg = await (await fetch("/api/config")).json();
-        if (!cfg.google_client_id) return;          // Google не настроен — кнопки просто нет
+        if (!cfg.google_client_id) return;    
 
         await loadScript("https://accounts.google.com/gsi/client");
         google.accounts.id.initialize({
@@ -128,9 +119,6 @@ async function initGoogleSignIn() {
         console.error("Google sign-in unavailable:", err);
     }
 }
-
-
-// ===================== Кнопка Account =====================
 
 async function updateAccountButton() {
     const btn = document.getElementById("account-btn");
@@ -162,9 +150,5 @@ async function updateAccountButton() {
         console.error(err);
     }
 }
-
-
-// ===================== Запуск =====================
-
 updateAccountButton();
 initGoogleSignIn();
