@@ -365,7 +365,7 @@ def api_admin_news_update(nid):
 
     image = row["image"]
     if new_image:
-        delete_upload(image)      # старая картинка больше не нужна
+        delete_upload(image)   
         image = new_image
 
     db.execute(
