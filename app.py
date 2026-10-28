@@ -5,10 +5,10 @@ from datetime import timedelta
 from functools import wraps
 
 from flask import Flask, abort, g, jsonify, redirect, request, send_from_directory, session
-from google.auth.transport
-import requests as google_requests
-from google.oauth2 import id_token
-from werkzeug.security import check_password_hash, generate_password_hash
+#from google.auth.transport
+#import requests as google_requests
+#from google.oauth2 import id_token
+#from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SITE_DIR = os.path.join(BASE_DIR, "static", "web")
@@ -18,7 +18,7 @@ PRIVATE_DIR = os.path.join(BASE_DIR, "private")
 DB_PATH = os.path.join(BASE_DIR, "users.db")
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
-_google_request = google_requests.Request()
+#google_request = google_requests.Request()
 
 app = Flask(__name__, static_folder=SITE_DIR, static_url_path="")
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
@@ -169,7 +169,7 @@ def api_register():
     try:
         cur = db.execute(
             "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-            (uname, email, generate_password_hash(psw)),
+            (uname, email, """generate_password_hash""" (psw)),
         )
         db.commit()
     except sqlite3.IntegrityError:
@@ -190,7 +190,7 @@ def api_login():
         "SELECT * FROM users WHERE username = ?", (uname,)
     ).fetchone()
 
-    if user is None or not check_password_hash(user["password_hash"], psw):
+    if user is None or not """check_password_hash"""(user["password_hash"], psw):
         return jsonify(ok=False, error="Wrong username or password"), 401
 
     session.clear()
@@ -209,7 +209,7 @@ def unique_username(db, base):
     return name
 
 
-@app.post("/api/auth/google")
+"""@app.post("/api/auth/google")
 def api_auth_google():
     if not GOOGLE_CLIENT_ID:
         return jsonify(ok=False, error="Google sign-in is not configured"), 500
@@ -249,7 +249,7 @@ def api_auth_google():
     session.permanent = True
     session["user_id"] = user["id"]
     return jsonify(ok=True, username=user["username"], is_admin=bool(user["is_admin"]))
-
+"""
 
 @app.get("/api/me")
 def api_me():

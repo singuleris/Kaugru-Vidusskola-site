@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jaunumi</title>
+     <script src="script.js" data-cfasync="false" defer></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -21,10 +22,70 @@
                 <li><a href="info.html">Par mums</a></li>
                 <li><a href="kalendars.html">Kalendārais plāns</a></li>
                 <li><a href="#">Kontakti</a></li>
+                <li><button type="button" class="nav-btn" id="account-btn" onclick="openModal('id01')">Account</button></li>
             </ul>
         </nav>
     </header>
+<div id="id01" class="modal">
+    <form class="modal-content animate" action="/action_page.php" method="post">
 
+        <div class="imgcontainer">
+            <span onclick="closeModal('id01')" class="close" title="Close Modal">&times;</span>
+            <img src="images/kvs-logo-01.png" alt="Kauguru vidusskolas logo" class="avatar">
+        </div>
+
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" id="uname" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="psw" name="psw" required>
+
+            <button type="submit">Login</button>
+            <div id="g_id_onload" data-client_id="ТВОЙ_CLIENT_ID.apps.googleusercontent.com" data-callback="onGoogleSignIn"  data-auto_prompt="false"></div>
+<div class="g_id_signin" data-type="standard" data-text="signin_with" data-width="300"></div>
+            <label>
+                <input type="checkbox" checked name="remember">
+                Remember me
+            </label>
+        </div>
+
+        <div class="container modal-footer">
+            <button type="button" onclick="closeModal('id01')" class="cancelbtn">Cancel</button>
+            <button type="button" onclick="openRegister()" class="registerbtn">Register</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+        </div>
+
+    </form>
+</div>
+
+<div id="id02" class="modal">
+    <form class="modal-content animate" action="/register.php" method="post">
+
+        <div class="imgcontainer">
+            <span onclick="closeModal('id02')" class="close" title="Close Modal">&times;</span>
+            <img src="images/kvs-logo-01.png" alt="Kauguru vidusskolas logo" class="avatar">
+        </div>
+
+        <div class="container">
+            <label for="reg-uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" id="reg-uname" name="uname" required>
+
+            <label for="reg-email"><b>Email</b></label>
+            <input type="email" placeholder="Enter Email" id="reg-email" name="email" required>
+
+            <label for="reg-psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="reg-psw" name="psw" required>
+
+            <button type="submit">Register</button>
+        </div>
+
+        <div class="container modal-footer">
+            <button type="button" onclick="closeModal('id02')" class="cancelbtn">Cancel</button>
+        </div>
+
+    </form>
+</div>
     <main>
     <div class="content">
         <div class="image-frame">

@@ -12,7 +12,9 @@ body {
     overflow-x: hidden;
 }
 
-
+.modal {
+    display: none;
+}
 img {
     max-width: 100%;
     height: auto;
