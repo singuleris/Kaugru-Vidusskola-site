@@ -169,8 +169,8 @@ def api_register():
     try:
         cur = db.execute(
             "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-            (uname, email, """generate_password_hash""" (psw)),
-        )
+            (uname, email,(psw)),
+        )   
         db.commit()
     except sqlite3.IntegrityError:
         return jsonify(ok=False, error="Username or email already taken"), 409
