@@ -99,7 +99,6 @@ init_db()
 
 
 def current_user():
-    """Текущий пользователь из базы (или None). Права всегда берутся из БД."""
     user_id = session.get("user_id")
     if user_id is None:
         return None
@@ -119,7 +118,6 @@ def admin_required(view):
 
 
 def save_image(file):
-    """Сохраняет загруженную картинку под случайным именем. Возвращает путь вида uploads/xxx.png."""
     if file is None or not file.filename:
         return None
     ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
@@ -131,7 +129,6 @@ def save_image(file):
 
 
 def delete_upload(path):
-    """Удаляет файл, только если он из uploads/ (картинки из images/ не трогаем)."""
     if path and path.startswith("uploads/"):
         try:
             os.remove(os.path.join(SITE_DIR, path))
@@ -200,7 +197,6 @@ def api_login():
 
 
 def unique_username(db, base):
-    """Имя для нового Google-пользователя: из почты, без пробелов; если занято — добавляем цифру."""
     base = "".join(ch for ch in base if ch.isalnum() or ch in "._-")[:30] or "user"
     name, n = base, 1
     while db.execute("SELECT 1 FROM users WHERE username = ?", (name,)).fetchone():
@@ -261,7 +257,6 @@ def api_me():
 
 @app.get("/api/config")
 def api_config():
-    """Публичные настройки для фронтенда (Client ID не секретный)."""
     return jsonify(google_client_id=GOOGLE_CLIENT_ID or None)
 
 
