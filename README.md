@@ -9,6 +9,9 @@ Kvs site
 plz use venv
 install  webview
 
+Start app - app.py
+
+
 
 
 
